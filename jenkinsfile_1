@@ -1,0 +1,54 @@
+pipeline{
+    agent any
+    tools {
+        maven 'maven3'
+    }
+    
+    stages{
+        stage("UnitTest"){
+            steps{
+                echo "===UnitTest====="
+                sh 'mvn test'
+            }
+        }    
+        stage("Build"){
+            steps{
+                echo "==Build==="
+                sh 'mvn package'
+            }
+        }
+        
+        stage("Deploy On Test"){
+            steps{
+                deploy adapters: [tomcat9(credentialsId: 'tomcatcred', path: '', url: 'http://54.158.118.239:8080/')], contextPath: '/app', war: '**/*.war'
+                echo "==DeployonTest=="
+            }
+        }
+        
+        stage("Deploy on Prod"){
+            steps{
+            deploy adapters: [tomcat9(credentialsId: 'tomcatcred', path: '', url: 'http://44.201.113.202:8080')], contextPath: '/app', war: '**/*.war'
+            echo "=Deploy on Prod="
+            }
+                
+        }
+        
+        
+        
+    }
+    
+    post{
+        always{
+            echo "always"
+        }
+        
+        failure{
+            echo "failed"
+        }
+        
+        success{
+            echo "success"
+        }
+    }
+    
+}
