@@ -7,6 +7,7 @@ pipeline{
     stages{
         stage("UnitTest"){
             steps{
+               slackSend channel: 'jenkins', message: 'Job Started'
                 echo "===UnitTest====="
                 sh 'mvn test'
             }
@@ -48,11 +49,11 @@ pipeline{
         }
         
         failure{
-            echo "failed"
+            slackSend channel: 'jenkins', message: 'Job Failed'
         }
         
         success{
-            echo "success"
+            slackSend channel: 'jenkins', message: 'Job Success'
         }
     }
     
