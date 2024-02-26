@@ -19,6 +19,7 @@ pipeline{
         }
         
         stage("Deploy On Test"){
+
             steps{
                 deploy adapters: [tomcat9(credentialsId: 'tomcatcred', path: '', url: 'http://54.158.118.239:8080/')], contextPath: '/app', war: '**/*.war'
                 echo "==DeployonTest=="
@@ -26,6 +27,10 @@ pipeline{
         }
         
         stage("Deploy on Prod"){
+            input{
+                message "Should we continue?"
+                ok "Yes we should"
+            }
             steps{
             deploy adapters: [tomcat9(credentialsId: 'tomcatcred', path: '', url: 'http://44.201.113.202:8080')], contextPath: '/app', war: '**/*.war'
             echo "=Deploy on Prod="
