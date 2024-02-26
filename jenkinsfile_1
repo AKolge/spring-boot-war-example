@@ -14,7 +14,7 @@ pipeline{
         }    
         stage("Build"){
             steps{
-                echo "==Build==="
+                echos "==Build==="
                 sh 'mvn package'
             }
         }
